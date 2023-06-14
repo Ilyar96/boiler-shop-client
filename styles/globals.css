@@ -14,7 +14,7 @@ body {
 	font-family: Roboto, sans-serif;
 }
 
-body.dark-mode {
+body.dark_mode {
 	background: #222;
 }
 
