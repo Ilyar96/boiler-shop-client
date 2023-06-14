@@ -22,6 +22,7 @@ export default function Home() {
           </p>
           <div>
             <a
+              // eslint-disable-next-line max-len
               href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
               target="_blank"
               rel="noopener noreferrer"
@@ -52,6 +53,7 @@ export default function Home() {
 
         <div className={styles.grid}>
           <a
+            // eslint-disable-next-line max-len
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className={styles.card}
             target="_blank"
