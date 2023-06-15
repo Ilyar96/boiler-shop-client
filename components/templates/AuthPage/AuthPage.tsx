@@ -1,11 +1,15 @@
 import React, { MutableRefObject, useRef } from 'react'
+import { useStore } from 'effector-react'
 import cn from 'classnames'
-import SignUpForm from '../../modules/AuthPage/SignUpForm'
-import SignInForm from '../../modules/AuthPage/SignInForm'
+import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
+import SignUpForm from '@/components//modules/AuthPage/SignUpForm'
+import SignInForm from '@/components//modules/AuthPage/SignInForm'
+import { $mode } from '@/context/mode'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/auth/index.module.scss'
 
 export const AuthPage = () => {
+  const mode = useStore($mode)
   const isMedia800 = useMediaQuery(800)
   const switchCtn = useRef() as MutableRefObject<HTMLDivElement>
   const switchC1 = useRef() as MutableRefObject<HTMLDivElement>
@@ -33,7 +37,14 @@ export const AuthPage = () => {
   }
 
   return (
-    <div className={cn(styles.main)}>
+    <div
+      className={cn(styles.main, {
+        [styles.dark_mode]: mode === 'dark',
+      })}
+    >
+      <div className={styles.mode_toggle}>
+        <ModeToggler />
+      </div>
       <div
         className={cn(styles.container, styles.a_container)}
         ref={aContainer}
