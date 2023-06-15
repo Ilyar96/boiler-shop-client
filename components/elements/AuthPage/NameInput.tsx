@@ -5,7 +5,7 @@ import styles from '@/styles/auth/index.module.scss'
 
 const minLength = 2
 const maxLength = 20
-const options = {
+const initialOptions = {
   required: 'Введите имя!',
   minLength,
   maxLength,
@@ -15,7 +15,11 @@ const options = {
   },
 }
 
-const NameInput = ({ register, errors }: IAuthPageInput) => (
+const NameInput = ({
+  register,
+  errors,
+  options = initialOptions,
+}: IAuthPageInput) => (
   <label className={styles.form__label}>
     <input
       {...register('name', options)}

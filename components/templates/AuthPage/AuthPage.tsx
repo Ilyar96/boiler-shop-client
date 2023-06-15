@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useRef } from 'react'
 import cn from 'classnames'
 import SignUpForm from '../../modules/AuthPage/SignUpForm'
+import SignInForm from '../../modules/AuthPage/SignInForm'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import styles from '@/styles/auth/index.module.scss'
 
@@ -47,27 +48,7 @@ export const AuthPage = () => {
         ref={bContainer}
       >
         <div className={styles.container__inner}>
-          <form className={styles.form} id="b-form">
-            <h2 className={cn(styles.form_title, styles.title)}>
-              Sign in to Website
-            </h2>
-            <input
-              className={styles.form__input}
-              type="text"
-              placeholder="Email"
-            />
-            <input
-              className={styles.form__input}
-              type="password"
-              placeholder="Password"
-            />
-            <a className={styles.form__link}>Forgot your password?</a>
-            <button
-              className={cn(styles.form__button, styles.button, styles.submit)}
-            >
-              SIGN IN
-            </button>
-          </form>
+          <SignInForm />
         </div>
       </div>
 

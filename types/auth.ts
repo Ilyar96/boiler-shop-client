@@ -1,4 +1,4 @@
-import { UseFormRegister, FieldErrors } from 'react-hook-form'
+import { UseFormRegister, FieldErrors, RegisterOptions } from 'react-hook-form'
 
 export interface IInputs {
   name: string
@@ -9,11 +9,15 @@ export interface IInputs {
 export interface IAuthPageInput {
   register: UseFormRegister<IInputs>
   errors: FieldErrors<IInputs>
+  options?: RegisterOptions<IInputs, keyof IInputs>
 }
 
-export interface ISignUpFx {
+export interface ISignInFx {
   url: string
   username: string
   password: string
+}
+
+export interface ISignUpFx extends ISignInFx {
   email: string
 }

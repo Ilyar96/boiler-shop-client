@@ -125,8 +125,11 @@ $transition: 1.25s;
     color: $black;
     font-size: 15px;
     margin-top: 25px;
+    border: none;
     border-bottom: 1px solid $gray;
     line-height: 2;
+    background: none;
+    cursor: pointer;
   }
 }
 

@@ -1,6 +1,6 @@
 import { createEffect } from 'effector-next'
 import { toast } from 'react-toastify'
-import { ISignUpFx } from '@/types/auth'
+import { ISignInFx, ISignUpFx } from '@/types/auth'
 import api from '../axiosClient'
 
 export const signUpFx = createEffect(
@@ -11,6 +11,23 @@ export const signUpFx = createEffect(
       toast.warning(data.warningMessage)
       return
     }
+
+    toast.success('Регистрация прошла успешно!')
+
+    return data
+  }
+)
+
+export const signInFx = createEffect(
+  async ({ url, username, password }: ISignInFx) => {
+    const { data } = await api.post(url, { username, password })
+
+    if (data.warningMessage) {
+      toast.warning(data.warningMessage)
+      return
+    }
+
+    toast.success('Вход выполнен!')
 
     return data
   }

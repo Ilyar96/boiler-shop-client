@@ -8,7 +8,7 @@ const maxLength = 20
 const regExp = new RegExp(
   '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{' + minLength + ',})$'
 )
-const options = {
+const initialOptions = {
   required: 'Введите пароль!',
   minLength,
   maxLength,
@@ -16,11 +16,15 @@ const options = {
     value: regExp,
     message:
       // eslint-disable-next-line max-len
-      'Пароль должен содеражать минимум 1 число, 1 символ в верхнем регистре, 1 символ в нижнем регистре, допускается только латиница',
+      'Пароль должен содержать минимум 1 число, 1 символ в верхнем регистре, 1 символ в нижнем регистре, допускается только латиница',
   },
 }
 
-const PasswordInput = ({ register, errors }: IAuthPageInput) => (
+const PasswordInput = ({
+  register,
+  errors,
+  options = initialOptions,
+}: IAuthPageInput) => (
   <label className={styles.form__label}>
     <input
       {...register('password', options)}
