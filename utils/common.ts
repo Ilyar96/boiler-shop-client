@@ -22,3 +22,18 @@ export const declinationOfNum = (
   }
   return textForms[2]
 }
+
+export const toggleClassNamesForOverlayAndBody = (
+  overlayClassName = 'open'
+) => {
+  document.querySelector('.overlay')?.classList.toggle(overlayClassName)
+  document.querySelector('.body')?.classList.toggle('overflow-hidden')
+}
+
+export const removeClassNamesForOverlayAndBody = () => {
+  const overlay = document.querySelector('.overlay')
+
+  overlay?.classList.remove('open')
+  overlay?.classList.remove('open-search')
+  document.querySelector('.body')?.classList.remove('overflow-hidden')
+}

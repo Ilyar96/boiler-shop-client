@@ -8,6 +8,7 @@ import { signInFx } from '@/app/api/auth'
 import { showAuthError } from '@/utils/errors'
 import styles from '@/styles/auth/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
+import { useRouter } from 'next/router'
 
 const nameOptions = {
   required: 'Введите имя!',
@@ -19,6 +20,7 @@ const passwordOptions = {
 
 const SignInForm = () => {
   const [spinner, setSpinner] = useState(false)
+  const route = useRouter()
 
   const {
     register,
@@ -36,6 +38,7 @@ const SignInForm = () => {
         password: data.password,
       })
       reset()
+      route.push('/dashboard')
     } catch (err) {
       showAuthError(err)
     } finally {
@@ -52,9 +55,9 @@ const SignInForm = () => {
         errors={errors}
         options={passwordOptions}
       />
-      <button type="button" className={styles.form__link}>
+      {/* <button type="button" className={styles.form__link}>
         Забыли пароль?
-      </button>
+      </button> */}
       <button
         type="submit"
         className={cn(styles.form__button, styles.button, styles.submit)}

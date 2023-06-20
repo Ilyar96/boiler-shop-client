@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useStore } from 'effector-react'
+import cn from 'classnames'
 import { useTheme } from '@/hooks/useTheme'
 import { $mode } from '@/context/mode'
 import styles from '@/styles/modeToggler/index.module.scss'
@@ -18,7 +19,7 @@ const ModeToggler = () => {
   }, [mode])
 
   return (
-    <div className={styles.theme}>
+    <div className={cn(styles.theme, { [styles.dark_mode]: mode === 'dark' })}>
       <input
         className={styles.theme__input}
         type="checkbox"

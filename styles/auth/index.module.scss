@@ -130,6 +130,10 @@ $transition: 1.25s;
     line-height: 2;
     background: none;
     cursor: pointer;
+
+    .dark_mode & {
+      color: #f2f2f2;
+    }
   }
 }
 

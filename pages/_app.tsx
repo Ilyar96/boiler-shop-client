@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import { ToastContainer } from 'react-toastify'
+import { useStore } from 'effector-react'
 import { withHydrate } from 'effector-next'
+import { $mode } from '@/context/mode'
 import 'react-toastify/dist/ReactToastify.css'
 import '@/styles/globals.css'
 
@@ -9,6 +11,7 @@ const enhance = withHydrate()
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [mounted, setMounted] = useState(false)
+  const mode = useStore($mode)
 
   useEffect(() => {
     setMounted(true)
@@ -23,7 +26,7 @@ const App = ({ Component, pageProps }: AppProps) => {
           hideProgressBar={false}
           closeOnClick
           limit={1}
-          theme="light"
+          theme={mode === 'dark' ? 'dark' : 'light'}
         />
       </>
     )
