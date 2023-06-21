@@ -5,7 +5,10 @@ import Footer from '@/components/modules/Footer/Footer'
 const Layout = ({ children }: PropsWithChildren) => (
   <div className="wrapper">
     <Header />
-    {children}
+    <main>
+      {children}
+      <div className="overlay" />
+    </main>
     <Footer />
   </div>
 )

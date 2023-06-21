@@ -1,7 +1,8 @@
 import Head from 'next/head'
+import DashboardPage from '../../components/templates/DashboardPage/DashboardPage'
 import Layout from '@/components/layout/Layout'
 
-const Dahsboard = () => (
+const Dashboard = () => (
   <>
     <Head>
       <title>Create Next App</title>
@@ -11,12 +12,9 @@ const Dahsboard = () => (
       <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
     </Head>
     <Layout>
-      <main>
-        <h1>Dashboard</h1>
-        <div className="overlay" />
-      </main>
+      <DashboardPage />
     </Layout>
   </>
 )
 
-export default Dahsboard
+export default Dashboard
