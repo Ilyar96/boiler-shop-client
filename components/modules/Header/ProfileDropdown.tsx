@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'classnames'
 import { IWrappedComponentProps } from '@/types/common'
 import { $mode } from '@/context/mode'
+import { $user } from '@/context/user'
 import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
 import LogoutSvg from '@/components/elements/LogoutSvg/LogoutSvg'
 import { withClickOutside } from '@/utils/withClickOutside'
@@ -12,6 +13,7 @@ import styles from '@/styles/profileDropdown/index.module.scss'
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
     const mode = useStore($mode)
+    const user = useStore($user)
     const toggleProfileDropdown = () => setOpen(!open)
 
     return (
@@ -36,9 +38,11 @@ const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
               style={{ transformOrigin: 'right top' }}
             >
               <li className={styles.profile__dropdown__user}>
-                <span className={styles.profile__dropdown__username}>Ivan</span>
+                <span className={styles.profile__dropdown__username}>
+                  {user?.username}
+                </span>
                 <span className={styles.profile__dropdown__email}>
-                  Ivan@gmail.com
+                  {user?.email}
                 </span>
               </li>
               <li className={styles.profile__dropdown__item}>

@@ -21,3 +21,9 @@ export interface ISignInFx {
 export interface ISignUpFx extends ISignInFx {
   email: string
 }
+
+export interface IUser {
+  username: string
+  userId: number | string
+  email: string
+}
