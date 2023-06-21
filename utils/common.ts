@@ -37,3 +37,6 @@ export const removeClassNamesForOverlayAndBody = () => {
   overlay?.classList.remove('open-search')
   document.querySelector('.body')?.classList.remove('overflow-hidden')
 }
+
+export const formatPrice = (x: number) =>
+  x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
