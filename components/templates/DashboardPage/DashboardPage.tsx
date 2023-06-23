@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 import { $mode } from '@/context/mode'
 import { IBoilerPart } from '@/types/boilerparts'
-import { getBestsellersOrNewParts } from '@/app/api/boilerparts'
+import { getBestsellersOrNewPartsFx } from '@/app/api/boilerparts'
 import DashboardSlider from './DashboardSlider'
 import CartAlert from '@/components/modules/DashboardPage/CartAlert'
 import { $shoppingCart } from '@/context/shopping-cart'
@@ -27,8 +27,8 @@ const DashboardPage = () => {
   const loadBoilerParts = async () => {
     try {
       setSpinner(true)
-      const newParts = await getBestsellersOrNewParts('/boiler-parts/new')
-      const bestSellerParts = await getBestsellersOrNewParts(
+      const newParts = await getBestsellersOrNewPartsFx('/boiler-parts/new')
+      const bestSellerParts = await getBestsellersOrNewPartsFx(
         '/boiler-parts/bestsellers'
       )
 
