@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
 import { useStore } from 'effector-react'
+import { toast } from 'react-toastify'
+import { AnimatePresence, motion } from 'framer-motion'
 import BrandsSlider from '@/components/modules/DashboardPage/BrandsSlider'
 import { $mode } from '@/context/mode'
 import { IBoilerPart } from '@/types/boilerparts'
-import styles from '@/styles/dashboard/index.module.scss'
 import { getBestsellersOrNewParts } from '@/app/api/boilerparts'
-import { toast } from 'react-toastify'
 import DashboardSlider from './DashboardSlider'
+import CartAlert from '@/components/modules/DashboardPage/CartAlert'
+import { $shoppingCart } from '@/context/shopping-cart'
+import styles from '@/styles/dashboard/index.module.scss'
 
 const DashboardPage = () => {
   const mode = useStore($mode)
+  const shoppingCart = useStore($shoppingCart)
+  const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
   const [newParts, setNewParts] = useState<IBoilerPart[]>([])
   const [bestsellers, setBestsellers] = useState<IBoilerPart[]>([])
   const [spinner, setSpinner] = useState(false)
+
+  useEffect(() => {
+    loadBoilerParts()
+  }, [])
 
   const loadBoilerParts = async () => {
     try {
@@ -32,15 +41,29 @@ const DashboardPage = () => {
     }
   }
 
-  useEffect(() => {
-    loadBoilerParts()
-  }, [])
-
+  const closeAlert = () => {
+    setShowAlert(false)
+  }
+  console.log('56'.endsWith(6))
   return (
     <section
       className={cn(styles.dashboard, { [styles.dark_mode]: mode === 'dark' })}
     >
       <div className={cn('container', styles.dashboard__container)}>
+        <AnimatePresence>
+          {showAlert && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className={styles.dashboard__alert}
+            >
+              <CartAlert count={shoppingCart.length} closeAlert={closeAlert} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className={styles.dashboard__brands}>
           <BrandsSlider />
         </div>
