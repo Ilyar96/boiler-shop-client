@@ -9,6 +9,7 @@ import {
   menuStyles,
   optionStyles,
 } from '@/styles/searchInput'
+import { createSelectOption } from '@/utils/common'
 import SearchSvg from '../SearchSvg/SearchSvg'
 import styles from '@/styles/header/index.module.scss'
 
@@ -44,7 +45,7 @@ const SearchInput = () => {
         }}
         options={[
           1, 5, 6, 7, 8, 1, 5, 6, 7, 8, 1, 5, 6, 7, 8, 1, 5, 6, 7, 8,
-        ].map((item) => ({ value: item, label: item }))}
+        ].map(createSelectOption)}
       />
     </>
   )

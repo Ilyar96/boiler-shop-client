@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import { ToastContainer } from 'react-toastify'
 import { useStore } from 'effector-react'
 import { withHydrate } from 'effector-next'
-import { $mode } from '@/context/mode'
+import NextNProgress from 'nextjs-progressbar'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { $mode } from '@/context/mode'
 import '@/styles/globals.css'
 
 const enhance = withHydrate()
@@ -20,6 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     mounted && (
       <>
+        <NextNProgress />
         <Component {...pageProps} />
         <ToastContainer
           position="top-right"
