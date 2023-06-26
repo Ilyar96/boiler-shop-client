@@ -2,8 +2,9 @@ import Head from 'next/head'
 import Layout from '@/components/layout/Layout'
 import useRedirectByUserCheck from '@/hooks/useRedirectByUserCheck'
 import CatalogPage from '@/components/templates/CatalogPage/CatalogPage'
+import { IQueryParams } from '@/types/catalog'
 
-const Catalog = () => {
+const Catalog = ({ query }: { query: IQueryParams }) => {
   const { shouldLoadContent } = useRedirectByUserCheck()
 
   return (
@@ -18,12 +19,25 @@ const Catalog = () => {
       {shouldLoadContent && (
         <>
           <Layout>
-            <CatalogPage />
+            <CatalogPage query={query} />
           </Layout>
         </>
       )}
     </>
   )
 }
+
+export const getServerSideProps = async (context: { query: IQueryParams }) => ({
+  props: {
+    query: {
+      ...context.query,
+      offset: context.query?.offset
+        ? context.query.offset >= 0
+          ? context.query.offset
+          : 0
+        : 0,
+    },
+  },
+})
 
 export default Catalog

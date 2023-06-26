@@ -18,3 +18,10 @@ export interface IBoilerParts {
   count: number
   rows: IBoilerPart[]
 }
+
+export interface IBoilerPartsQuery {
+  limit?: number
+  offset?: number
+  sortField?: keyof IBoilerPart
+  sortType?: 1 | -1
+}

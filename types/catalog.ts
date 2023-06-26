@@ -1,4 +1,5 @@
 import { Event } from 'effector-next'
+import { IBoilerPart } from './boilerparts'
 
 export interface IManufacturersBlockProps {
   title: string
@@ -12,8 +13,9 @@ export interface IManufacturersBlockItemProps {
 }
 
 export interface IQueryParams {
-  offset: string
-  firs: string
+  limit: number
+  offset: number
+  first: string
   boiler: string
   parts: string
   priceFrom: string
