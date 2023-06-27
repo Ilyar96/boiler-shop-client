@@ -15,6 +15,7 @@ import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
 import { IQueryParams } from '@/types/catalog'
 import { IBoilerPart, IBoilerPartsQuery } from '@/types/boilerparts'
 import { BOILER_PARTS_PER_PAGE } from '@/constants'
+import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
 import styles from '@/styles/catalog/index.module.scss'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 
@@ -24,7 +25,6 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const mode = useStore($mode)
   const [spinner, setSpinner] = useState(false)
   const [currentPage, setCurrentPage] = useState(+query.offset)
-  console.log('query.offset: ', query.offset)
   const prevParams = useRef<IBoilerPartsQuery | null>(null)
   const pageCount = Math.ceil(boilerParts.count / BOILER_PARTS_PER_PAGE)
 
@@ -141,7 +141,8 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
         </div>
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
-            <div className={styles.catalog__bottom__filters}>Filters</div>
+            <CatalogFilters />
+
             {spinner ? (
               <ul className={skeletonStyles.skeleton}>
                 {Array.from(new Array(20)).map((_, i) => (

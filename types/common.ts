@@ -22,4 +22,6 @@ export interface IAccordion {
   title: string | false
   titleClass?: string
   arrowOpenClass?: string
+  hideArrowClass?: string
+  isMobileForFilters?: boolean
 }

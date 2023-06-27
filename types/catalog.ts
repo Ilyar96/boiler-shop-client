@@ -1,5 +1,4 @@
 import { Event } from 'effector-next'
-import { IBoilerPart } from './boilerparts'
 
 export interface IManufacturersBlockProps {
   title: string

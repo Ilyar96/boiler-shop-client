@@ -8,6 +8,8 @@ const Accordion = ({
   title,
   arrowOpenClass = '',
   titleClass = '',
+  isMobileForFilters,
+  hideArrowClass = '',
 }: IAccordion) => {
   const [expanded, setExpanded] = useState(false)
 
@@ -15,15 +17,28 @@ const Accordion = ({
 
   return (
     <>
-      <motion.button
-        initial={false}
-        onClick={toggleAccordion}
-        className={cn(titleClass, { [arrowOpenClass]: expanded })}
-      >
-        {title}
-      </motion.button>
+      {title && (
+        <>
+          {isMobileForFilters ? (
+            <button
+              className={cn(titleClass, { [hideArrowClass]: hideArrowClass })}
+              onClick={toggleAccordion}
+            >
+              {title}
+            </button>
+          ) : (
+            <motion.button
+              className={cn(titleClass, { [arrowOpenClass]: expanded })}
+              onClick={toggleAccordion}
+              initial={false}
+            >
+              {title}
+            </motion.button>
+          )}
+        </>
+      )}
       <AnimatePresence initial={false}>
-        {expanded && (
+        {(isMobileForFilters || expanded) && (
           <motion.div
             key="content"
             initial="collapsed"
