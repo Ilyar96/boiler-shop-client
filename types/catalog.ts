@@ -1,4 +1,5 @@
 import { Event } from 'effector-next'
+import { Dispatch } from 'react'
 
 export interface IManufacturersBlockProps {
   title: string
@@ -36,7 +37,7 @@ export interface IFilterManufacturerAccordionProps {
   updateManufacturer: Event<IFilterCheckboxItem>
 }
 
-interface ICatalogBaseTypes {
+export interface ICatalogBaseTypes {
   priceRange: number[]
   setPriceRange: (arg0: number[]) => void
   setIsPriceRangeChanged: (arg0: boolean) => void
@@ -51,8 +52,9 @@ export interface ICatalogFiltersProps
   extends ICatalogBaseTypes,
     ICatalogFiltersBaseTypes {
   isPriceRangeChanged: boolean
-  currentPage: number
-  setIsFilterInQuery: (arg0: boolean) => void
+  setCurrentPage: Dispatch<React.SetStateAction<number>>
+  setCatalogSpinner: Dispatch<React.SetStateAction<boolean>>
+  // setIsFilterInQuery: (arg0: boolean) => void
   closePopup: VoidFunction
   filtersMobileOpen: boolean
 }

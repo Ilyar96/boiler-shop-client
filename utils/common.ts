@@ -1,3 +1,5 @@
+import { NextRouter } from 'next/router'
+
 export const getWindowWidth = () => {
   const { innerWidth: windowWidth } =
     typeof window !== 'undefined' ? window : { innerWidth: 0 }
@@ -65,3 +67,18 @@ export const guidGenerator = () => {
     S4()
   )
 }
+
+export const smoothScrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  })
+}
+
+export const getQueryParamOnFirstRender = (
+  queryKey: string,
+  router: NextRouter
+) =>
+  router.query[queryKey] ||
+  router.asPath.match(new RegExp(`[&?]${queryKey}=(.*)(&|$)`))

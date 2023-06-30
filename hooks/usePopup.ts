@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   removeClassNamesForOverlayAndBody,
+  smoothScrollToTop,
   toggleClassNamesForOverlayAndBody,
 } from '@/utils/common'
 // import { setSearchInputZIndex } from '@/context/header'
@@ -9,11 +10,7 @@ export const usePopup = () => {
   const [open, setOpen] = useState(false)
 
   const toggleOpen = () => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
+    smoothScrollToTop()
     toggleClassNamesForOverlayAndBody()
     setOpen(!open)
   }

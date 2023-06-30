@@ -1,4 +1,5 @@
-import { guidGenerator } from './common'
+import { NextRouter } from 'next/router'
+import { getQueryParamOnFirstRender, guidGenerator } from './common'
 
 export const createManufacturerCheckboxObj = (title: string) => ({
   title,
@@ -30,3 +31,41 @@ export const partsManufacturers = [
   'Gasoline',
   'Croatia',
 ].map(createManufacturerCheckboxObj)
+
+const checkPriceFromQuery = (price: number) =>
+  price && !isNaN(price) && price >= 0 && price < 10_000
+
+export const checkQueryParams = (router: NextRouter) => {
+  const priceFromQueryValue = getQueryParamOnFirstRender(
+    'priceFrom',
+    router
+  ) as string
+  const priceToQueryValue = getQueryParamOnFirstRender(
+    'priceTo',
+    router
+  ) as string
+  const boilerQueryValue = JSON.parse(
+    decodeURIComponent(getQueryParamOnFirstRender('boiler', router) as string)
+  )
+  const partsQueryValue = JSON.parse(
+    decodeURIComponent(getQueryParamOnFirstRender('parts', router) as string)
+  )
+  const isValidBoilerQuery =
+    Array.isArray(boilerQueryValue) && !!boilerQueryValue?.length
+  const isValidPartsQuery =
+    Array.isArray(partsQueryValue) && !!partsQueryValue?.length
+  const isValidPriceRange =
+    checkPriceFromQuery(+priceToQueryValue) &&
+    checkPriceFromQuery(+priceFromQueryValue) &&
+    +priceToQueryValue >= +priceFromQueryValue
+
+  return {
+    isValidBoilerQuery,
+    isValidPartsQuery,
+    isValidPriceRange,
+    priceFromQueryValue,
+    priceToQueryValue,
+    boilerQueryValue,
+    partsQueryValue,
+  }
+}

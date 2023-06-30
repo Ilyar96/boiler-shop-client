@@ -31,11 +31,7 @@ export const getServerSideProps = async (context: { query: IQueryParams }) => ({
   props: {
     query: {
       ...context.query,
-      offset: context.query?.offset
-        ? context.query.offset >= 0
-          ? context.query.offset
-          : 0
-        : 0,
+      offset: context.query?.offset ? context.query.offset : 0,
     },
   },
 })

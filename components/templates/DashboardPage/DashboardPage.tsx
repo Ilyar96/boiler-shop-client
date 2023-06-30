@@ -44,7 +44,7 @@ const DashboardPage = () => {
   const closeAlert = () => {
     setShowAlert(false)
   }
-  console.log('56'.endsWith(6))
+
   return (
     <section
       className={cn(styles.dashboard, { [styles.dark_mode]: mode === 'dark' })}

@@ -4,3 +4,5 @@ export enum HTTPStatus {
 }
 
 export const BOILER_PARTS_PER_PAGE = 20
+
+export const initialCatalogPriceRange = [1_000, 9_000]

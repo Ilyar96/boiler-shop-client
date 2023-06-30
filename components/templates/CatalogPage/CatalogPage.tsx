@@ -1,112 +1,172 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import { toast } from 'react-toastify'
 import { AnimatePresence } from 'framer-motion'
 import ReactPaginate from 'react-paginate'
 import cn from 'classnames'
-import { isEqual } from 'lodash'
 import ManufacturersBlock from '@/components/modules/CatalogPage/ManufacturersBlock'
 import { $mode } from '@/context/mode'
 import FilterSelect from '@/components/modules/CatalogPage/FilterSelect'
 import { getBoilerPartsFx } from '@/app/api/boilerparts'
-import { $boilerParts, setBoilerParts } from '@/context/boilerParts'
+import {
+  $boilerManufacturers,
+  $boilerParts,
+  $partManufacturers,
+  setBoilerManufacturers,
+  setBoilerParts,
+  setPartManufacturers,
+  updateBoilerManufacturer,
+  updatePartManufacturer,
+} from '@/context/boilerParts'
 import CatalogItem from '@/components/modules/CatalogPage/CatalogItem'
-import { IQueryParams } from '@/types/catalog'
-import { IBoilerPart, IBoilerPartsQuery } from '@/types/boilerparts'
-import { BOILER_PARTS_PER_PAGE } from '@/constants'
+import { IFilterCheckboxItem, IQueryParams } from '@/types/catalog'
+import { IBoilerPartsQuery } from '@/types/boilerparts'
+import { BOILER_PARTS_PER_PAGE, initialCatalogPriceRange } from '@/constants'
 import CatalogFilters from '@/components/modules/CatalogPage/CatalogFilters'
 import styles from '@/styles/catalog/index.module.scss'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
+import { smoothScrollToTop } from '@/utils/common'
+import { usePopup } from '@/hooks/usePopup'
+import FilterSvg from '@/components/elements/FilterSvg/FilterSvg'
 
 const CatalogPage = ({ query }: { query: IQueryParams }) => {
   const boilerParts = useStore($boilerParts)
+  const boilerManufacturers = useStore($boilerManufacturers)
+  const partManufacturers = useStore($partManufacturers)
   const router = useRouter()
   const mode = useStore($mode)
   const [spinner, setSpinner] = useState(false)
-  const [currentPage, setCurrentPage] = useState(+query.offset)
-  const prevParams = useRef<IBoilerPartsQuery | null>(null)
+  const { closePopup, open, toggleOpen } = usePopup()
+  const [isFiltersReset, isFiltersResetDispatch] = useReducer(
+    (state) => ++state,
+    0
+  )
+  const [priceRange, setPriceRange] = useState(initialCatalogPriceRange)
+  const [isPriceRangeChanged, setIsPriceRangeChanged] = useState(false)
+  const isValidOffset =
+    query.offset && !isNaN(+query.offset) && +query.offset > 0
+  const [currentPage, setCurrentPage] = useState(
+    isValidOffset ? +query.offset - 1 : 0
+  )
   const pageCount = Math.ceil(boilerParts.count / BOILER_PARTS_PER_PAGE)
-
-  //Todo заменить
-  const event: any = null
-
-  useEffect(() => {
-    if (router.query?.offset && +router.query.offset < 0) {
-      router.replace({ query: { ...router.query, offset: 0 } }, undefined, {
-        shallow: true,
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const isAnyBoilerManufacturerChecked = boilerManufacturers.some(
+    (item) => item.checked
+  )
+  const isAnyPartManufacturerChecked = partManufacturers.some(
+    (item) => item.checked
+  )
+  const resetFilterBtnDisabled = !(
+    isPriceRangeChanged ||
+    isAnyBoilerManufacturerChecked ||
+    isAnyPartManufacturerChecked
+  )
 
   useEffect(() => {
     loadBoilerParts()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query.first, currentPage])
+  }, [router.query.first, currentPage, isFiltersReset])
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected)
     router.replace(
-      { query: { ...router.query, offset: event.selected } },
+      { query: { ...router.query, offset: event.selected + 1 } },
       undefined,
       { shallow: true }
     )
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    })
+    smoothScrollToTop()
   }
 
   const getBoilerPartQueryParams = (): IBoilerPartsQuery => {
     const first = window !== undefined ? router.query.first : query.first
-    let sortField: keyof IBoilerPart = 'popularity'
-    let sortType: 1 | -1 = -1
 
-    switch (first) {
-      case 'cheap':
-        sortField = 'price'
-        sortType = 1
-        break
-      case 'expensive':
-        sortField = 'price'
-        sortType = -1
-        break
-      case 'popular':
-        sortField = 'popularity'
-        sortType = -1
-        break
-    }
-
-    return {
+    const queryParams: IBoilerPartsQuery = {
       offset: currentPage,
-      sortField,
-      sortType,
       limit: BOILER_PARTS_PER_PAGE,
     }
+
+    if (first && typeof first === 'string') {
+      queryParams.first = first
+    }
+
+    return queryParams
   }
 
   const loadBoilerParts = async () => {
-    const params = getBoilerPartQueryParams()
-
-    if (prevParams.current && isEqual(params, prevParams.current)) {
-      return
+    const params = {
+      ...router.query,
+      ...getBoilerPartQueryParams(),
+      priceFrom: priceRange[0],
+      priceTo: priceRange[1],
     }
 
-    prevParams.current = params
+    if (!isValidOffset) {
+      router.replace(
+        {
+          query: {
+            ...router.query,
+            offset: 1,
+          },
+        },
+        undefined,
+        { shallow: true }
+      )
+
+      setCurrentPage(0)
+      params.offset = 0
+    }
 
     try {
       setSpinner(true)
+
       const data = await getBoilerPartsFx({ url: '/boiler-parts', params })
+
+      if (data.count > 0 && !data.rows.length) {
+        const maxPage = Math.ceil(data.count / BOILER_PARTS_PER_PAGE)
+
+        router.replace(
+          {
+            query: {
+              ...router.query,
+              offset: maxPage,
+            },
+          },
+          undefined,
+          { shallow: true }
+        )
+        setCurrentPage(maxPage - 1)
+      }
+
       setBoilerParts(data)
     } catch (error) {
       toast.error((error as Error).message)
     } finally {
-      setSpinner(false)
+      setTimeout(() => setSpinner(false), 1000)
     }
   }
 
+  const resetManufacturersCb = (manufacturersList: IFilterCheckboxItem[]) =>
+    manufacturersList.map((item) => ({
+      ...item,
+      checked: false,
+    }))
+
+  const resetFilters = () => {
+    const query = router.query
+    delete query.priceFrom
+    delete query.priceTo
+    delete query.boiler
+    delete query.parts
+    query.first = 'popular'
+
+    router.replace({ query })
+
+    setBoilerManufacturers(resetManufacturersCb(boilerManufacturers))
+    setPartManufacturers(resetManufacturersCb(partManufacturers))
+    setPriceRange(initialCatalogPriceRange)
+    setIsPriceRangeChanged(false)
+    isFiltersResetDispatch()
+  }
   return (
     <section
       className={cn(styles.catalog, { [styles.dark_mode]: mode === 'dark' })}
@@ -114,38 +174,65 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
       <div className={cn('container', styles.catalog__container)}>
         <h2 className={styles.catalog__title}>Каталог товаров</h2>
         <div className={styles.catalog__top}>
-          {false && (
+          {isAnyBoilerManufacturerChecked && (
             <AnimatePresence>
               <ManufacturersBlock
                 title="Производитель котлов:"
-                manufacturersList={[]}
-                event={event}
+                manufacturersList={boilerManufacturers}
+                event={updateBoilerManufacturer}
               />
             </AnimatePresence>
           )}
-          {false && (
+          {isAnyPartManufacturerChecked && (
             <AnimatePresence>
               <ManufacturersBlock
                 title="Производитель запчастей:"
-                manufacturersList={[]}
-                event={event}
+                manufacturersList={partManufacturers}
+                event={updatePartManufacturer}
               />
             </AnimatePresence>
           )}
           <div className={styles.catalog__top__inner}>
-            <button className={styles.catalog__top__reset} disabled>
+            {}
+            <button
+              className={styles.catalog__top__reset}
+              disabled={resetFilterBtnDisabled}
+              onClick={resetFilters}
+            >
               Сбросить фильтр
+            </button>
+            <button
+              className={styles.catalog__top__mobile_btn}
+              onClick={toggleOpen}
+            >
+              <span className={styles.catalog__top__mobile_btn__svg}>
+                <FilterSvg />
+              </span>
+              <span className={styles.catalog__top__mobile_btn__text}>
+                Фильтр
+              </span>
             </button>
             <FilterSelect />
           </div>
         </div>
         <div className={styles.catalog__bottom}>
           <div className={styles.catalog__bottom__inner}>
-            <CatalogFilters />
+            <CatalogFilters
+              priceRange={priceRange}
+              setIsPriceRangeChanged={setIsPriceRangeChanged}
+              setPriceRange={setPriceRange}
+              resetFilterBtnDisabled={resetFilterBtnDisabled}
+              resetFilters={resetFilters}
+              isPriceRangeChanged={isPriceRangeChanged}
+              setCurrentPage={setCurrentPage}
+              setCatalogSpinner={setSpinner}
+              filtersMobileOpen={open}
+              closePopup={closePopup}
+            />
 
             {spinner ? (
               <ul className={skeletonStyles.skeleton}>
-                {Array.from(new Array(20)).map((_, i) => (
+                {Array.from(new Array(BOILER_PARTS_PER_PAGE)).map((_, i) => (
                   <li
                     key={i}
                     className={`${skeletonStyles.skeleton__item} ${
@@ -157,18 +244,22 @@ const CatalogPage = ({ query }: { query: IQueryParams }) => {
                 ))}
               </ul>
             ) : (
-              <ul className={styles.catalog__list}>
+              <>
                 {boilerParts.rows?.length ? (
-                  boilerParts.rows.map((item) => (
-                    <CatalogItem item={item} key={item.id} />
-                  ))
+                  <ul className={styles.catalog__list}>
+                    {boilerParts.rows.map((item) => (
+                      <CatalogItem item={item} key={item.id} />
+                    ))}
+                  </ul>
                 ) : (
-                  <span>Список товаров пуст...</span>
+                  <span className={styles.catalog__list__empty}>
+                    Список товаров пуст...
+                  </span>
                 )}
-              </ul>
+              </>
             )}
           </div>
-          {!spinner && boilerParts?.rows?.length > 0 && (
+          {!spinner && boilerParts.count > BOILER_PARTS_PER_PAGE && (
             <ReactPaginate
               containerClassName={styles.catalog__bottom__list}
               pageClassName={styles.catalog__bottom__list__item}

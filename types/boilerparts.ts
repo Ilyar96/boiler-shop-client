@@ -22,6 +22,5 @@ export interface IBoilerParts {
 export interface IBoilerPartsQuery {
   limit?: number
   offset?: number
-  sortField?: keyof IBoilerPart
-  sortType?: 1 | -1
+  first?: string
 }
