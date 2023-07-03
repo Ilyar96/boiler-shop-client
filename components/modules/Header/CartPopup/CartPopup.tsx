@@ -1,20 +1,41 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { useStore } from 'effector-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'classnames'
 import Link from 'next/link'
 import { IWrappedComponentProps } from '@/types/common'
 import { $mode } from '@/context/mode'
-import { $shoppingCart } from '@/context/shopping-cart'
+import { $shoppingCart, setShoppingCart } from '@/context/shopping-cart'
 import { withClickOutside } from '@/utils/withClickOutside'
 import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
 import styles from '@/styles/cartPopup/index.module.scss'
+import CartPopupItem from './CartPopupItem'
+import { getCartItemsFx } from '@/app/api/shopping-cart'
+import { $user } from '@/context/user'
+import { toast } from 'react-toastify'
+import { formatPrice } from '@/utils/common'
+import { getTotalPrice } from '@/utils/shopping-cart'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
     const mode = useStore($mode)
+    const user = useStore($user)
     const shoppingCart = useStore($shoppingCart)
     const toggleCartDropdown = () => setOpen(!open)
+
+    useEffect(() => {
+      loadCartItems()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const loadCartItems = async () => {
+      try {
+        const data = await getCartItemsFx(`/shopping-cart/${user.userId}`)
+        setShoppingCart(data)
+      } catch (error) {
+        toast.error((error as Error).message)
+      }
+    }
 
     return (
       <div
@@ -48,7 +69,9 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
               <h3 className={styles.cart__popup__title}>Корзина</h3>
               <ul className={styles.cart__popup__list}>
                 {shoppingCart.length ? (
-                  shoppingCart.map((item) => <li key={item.id}>{item.name}</li>)
+                  shoppingCart.map((item) => (
+                    <CartPopupItem key={item.id} item={item} />
+                  ))
                 ) : (
                   <li className={styles.cart__popup__empty}>
                     <span className={styles.cart__popup__empty__text}>
@@ -62,7 +85,9 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
                   <span className={styles.cart__popup__footer__text}>
                     Общая сумма заказа
                   </span>
-                  <span className={styles.cart__popup__footer__price}>0</span>
+                  <span className={styles.cart__popup__footer__price}>
+                    {formatPrice(getTotalPrice(shoppingCart))} P
+                  </span>
                 </div>
                 <Link href={'/order'} passHref legacyBehavior>
                   <button

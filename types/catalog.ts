@@ -52,9 +52,8 @@ export interface ICatalogFiltersProps
   extends ICatalogBaseTypes,
     ICatalogFiltersBaseTypes {
   isPriceRangeChanged: boolean
-  setCurrentPage: Dispatch<React.SetStateAction<number>>
-  setCatalogSpinner: Dispatch<React.SetStateAction<boolean>>
-  // setIsFilterInQuery: (arg0: boolean) => void
+  setCurrentPage: (arg: number) => void
+  setCatalogSpinner: (arg: boolean) => void
   closePopup: VoidFunction
   filtersMobileOpen: boolean
 }
