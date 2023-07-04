@@ -15,6 +15,7 @@ export const updateCartItemCount = shoppingCart.createEvent<{
   partId: number
   count: number
 }>()
+export const setDisableCart = shoppingCart.createEvent<boolean>()
 
 const remove = (cartItems: IShoppingCartItem[], partId: number) =>
   cartItems.filter((item) => item.partId !== partId)
@@ -33,7 +34,6 @@ const updateCartItem = <T extends keyof IShoppingCartItem>(
     }
     return item
   })
-  console.log('map: ', map)
   return map
 }
 
@@ -48,3 +48,7 @@ export const $shoppingCart = shoppingCart
   .on(updateCartItemCount, (state, { partId, count }) => [
     ...updateCartItem(state, partId, { count }),
   ])
+
+export const $disabledCart = shoppingCart
+  .createStore(false)
+  .on(setDisableCart, (_, payload) => payload)

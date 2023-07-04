@@ -2,22 +2,27 @@ import React, { forwardRef, useEffect } from 'react'
 import { useStore } from 'effector-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'classnames'
+import { toast } from 'react-toastify'
 import Link from 'next/link'
 import { IWrappedComponentProps } from '@/types/common'
 import { $mode } from '@/context/mode'
-import { $shoppingCart, setShoppingCart } from '@/context/shopping-cart'
+import {
+  $disabledCart,
+  $shoppingCart,
+  setShoppingCart,
+} from '@/context/shopping-cart'
 import { withClickOutside } from '@/utils/withClickOutside'
-import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
-import styles from '@/styles/cartPopup/index.module.scss'
 import CartPopupItem from './CartPopupItem'
 import { getCartItemsFx } from '@/app/api/shopping-cart'
 import { $user } from '@/context/user'
-import { toast } from 'react-toastify'
-import { formatPrice } from '@/utils/common'
 import { getTotalPrice } from '@/utils/shopping-cart'
+import { formatPrice } from '@/utils/common'
+import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
+import styles from '@/styles/cartPopup/index.module.scss'
 
 const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
+    const disabledCart = useStore($disabledCart)
     const mode = useStore($mode)
     const user = useStore($user)
     const shoppingCart = useStore($shoppingCart)
@@ -44,17 +49,26 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
         })}
         ref={ref}
       >
-        <button className={styles.cart__btn} onClick={toggleCartDropdown}>
-          {!!shoppingCart.length && (
-            <span className={styles.cart__btn__count}>
-              {shoppingCart.length}
+        {disabledCart ? (
+          <button className={styles.cart__btn} style={{ cursor: 'auto' }}>
+            <span className={styles.cart__svg}>
+              <ShoppingCartSvg />
             </span>
-          )}
-          <span className={styles.cart__svg}>
-            <ShoppingCartSvg />
-          </span>
-          <span className={styles.cart__text}>Корзина</span>
-        </button>
+            <span className={styles.cart__text}>Корзина</span>
+          </button>
+        ) : (
+          <button className={styles.cart__btn} onClick={toggleCartDropdown}>
+            {!!shoppingCart.length && (
+              <span className={styles.cart__btn__count}>
+                {shoppingCart.length}
+              </span>
+            )}
+            <span className={styles.cart__svg}>
+              <ShoppingCartSvg />
+            </span>
+            <span className={styles.cart__text}>Корзина</span>
+          </button>
+        )}
 
         <AnimatePresence>
           {open && (

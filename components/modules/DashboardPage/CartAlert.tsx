@@ -20,7 +20,7 @@ const CartAlert = ({ count, closeAlert }: ICartAlertProps) => {
         <span>На сумму {formatPrice(totalPrice)} P</span>
       </div>
       <div className={styles.dashboard__alert__right}>
-        <Link href="/cart" legacyBehavior passHref>
+        <Link href="/order" legacyBehavior passHref>
           <a className={styles.dashboard__alert__btn_cart}>Перейти в корзину</a>
         </Link>
         <Link href="/order" legacyBehavior passHref>

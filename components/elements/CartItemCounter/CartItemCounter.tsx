@@ -18,6 +18,7 @@ const CartItemCounter = ({
   initialCount,
 }: ICartItemCounterProps) => {
   const mode = useStore($mode)
+  const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const spinnerDarkModeClass =
     mode === 'dark' ? '' : `${spinnerStyles.dark_mode}`
   const [spinner, setPinner] = useState(false)
@@ -76,7 +77,9 @@ const CartItemCounter = ({
   }
 
   return (
-    <div className={styles.cart__popup__list__item__counter}>
+    <div
+      className={`${styles.cart__popup__list__item__counter} ${darkModeClass}`}
+    >
       <button disabled={disableDecrease} onClick={decrease}>
         <MinusSvg />
       </button>

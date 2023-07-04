@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import ModeToggler from '@/components/elements/ModeToggler/ModeToggler'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -6,10 +8,19 @@ import SearchInput from '@/components/elements/Header/SearchInput'
 import CartPopup from './CartPopup/CartPopup'
 import SearchSvg from '../../elements/SearchSvg/SearchSvg'
 import styles from '@/styles/header/index.module.scss'
+import { setDisableCart } from '@/context/shopping-cart'
 
 const HeaderBottom = () => {
   const isMedia950 = useMediaQuery(950)
-  // const router = useRouter()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.pathname === '/order') {
+      setDisableCart(true)
+      return
+    }
+    setDisableCart(false)
+  }, [router.pathname])
 
   return (
     <div className={styles.header__bottom}>

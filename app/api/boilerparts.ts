@@ -3,7 +3,7 @@ import api from '../axiosClient'
 import {
   IBoilerPart,
   IBoilerParts,
-  IBoilerPartsFilters,
+  IBoilerPartsQuery,
 } from '@/types/boilerparts'
 
 export const getBestsellersOrNewPartsFx = createEffect(async (url: string) => {
@@ -13,7 +13,7 @@ export const getBestsellersOrNewPartsFx = createEffect(async (url: string) => {
 })
 
 export const getBoilerPartsFx = createEffect(
-  async ({ url, params }: { url: string; params?: IBoilerPartsFilters }) => {
+  async ({ url, params }: { url: string; params?: IBoilerPartsQuery }) => {
     const { data } = await api.get<IBoilerParts>(url, {
       params,
     })

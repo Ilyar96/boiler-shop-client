@@ -18,6 +18,7 @@ import { getBoilerPartsFx } from '@/app/api/boilerparts'
 import { $boilerParts, setBoilerParts } from '@/context/boilerParts'
 import DashboardSlider from '../DashboardPage/DashboardSlider'
 import PartAccordion from '@/components/modules/PartPage/PartAccordion'
+import { removeFromCartFx } from '@/app/api/shopping-cart'
 import styles from '@/styles/part/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 
@@ -28,8 +29,8 @@ const Part = () => {
   const boilerParts = useStore($boilerParts)
   const boilerPart = useStore($boilerPart)
   const shoppingCart = useStore($shoppingCart)
-  const [spinnerToggleCart, setSpinnerToggleCart] = useState(false)
-  const [spinnerSlider, setSpinnerSlider] = useState(false)
+  const spinnerToggleCart = useStore(removeFromCartFx.pending)
+  const spinnerSlider = useStore(getBoilerPartsFx.pending)
   const isMobile = useMediaQuery(850)
   const isInCart = shoppingCart.some(
     (cartItem) => cartItem.partId === boilerPart.id
@@ -43,7 +44,6 @@ const Part = () => {
 
   const loadBoilerParts = async () => {
     try {
-      setSpinnerSlider(true)
       const data = await getBoilerPartsFx({
         url: '/boiler-parts',
         params: {
@@ -55,13 +55,11 @@ const Part = () => {
       setBoilerParts(data)
     } catch (error) {
       toast.error((error as Error).message)
-    } finally {
-      setTimeout(() => setSpinnerSlider(false), 1000)
     }
   }
 
   const toggleToCart = () =>
-    toggleCartItem(user.username, boilerPart.id, isInCart, setSpinnerToggleCart)
+    toggleCartItem(user.username, boilerPart.id, isInCart)
 
   return (
     <section className={cn({ [styles.dark_mode]: mode === 'dark' })}>
@@ -105,7 +103,7 @@ const Part = () => {
                       {isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}
                     </span>
                     {isInCart ? (
-                      <span>Добавлено в карзину</span>
+                      <span>Добавлено в корзину</span>
                     ) : (
                       <span>Положить в корзину</span>
                     )}
