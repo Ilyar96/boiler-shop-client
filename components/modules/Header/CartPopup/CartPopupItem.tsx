@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -40,7 +41,7 @@ const CartPopupItem = ({ item }: { item: IShoppingCartItem }) => {
     <li className={styles.cart__popup__list__item}>
       <div className={styles.cart__popup__list__item__top}>
         <div className={styles.cart__popup__list__item__img}>
-          <Image width={79} height={79} src={item.image} alt={item.name} />
+          <img width={79} height={79} src={item.image} alt={item.name} />
         </div>
         <Link href={`/catalog/${item.partId}`} passHref legacyBehavior>
           <a className={styles.cart__popup__list__item__text}>

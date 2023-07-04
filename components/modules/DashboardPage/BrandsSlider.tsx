@@ -30,6 +30,7 @@ const settings = {
   variableWidth: true,
   autoplay: true,
   speed: 5000,
+  swipeToSlide: true,
   prevArrow: <BrandsSliderPrevArrow />,
   nextArrow: <BrandsSliderNextArrow />,
 }

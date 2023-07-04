@@ -24,4 +24,5 @@ export interface IAccordion {
   arrowOpenClass?: string
   hideArrowClass?: string
   isMobileForFilters?: boolean
+  callback?: (arf0: boolean) => void
 }

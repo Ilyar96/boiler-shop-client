@@ -1,20 +1,23 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect } from 'react'
 import Slider from 'react-slick'
-import Image from 'next/image'
+import cn from 'classnames'
+import { useStore } from 'effector-react'
+import Link from 'next/link'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import Link from 'next/link'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { IDashboardSlider } from '@/types/dashboard'
 import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { formatPrice } from '@/utils/common'
+import { $mode } from '@/context/mode'
 import styles from '@/styles/dashboard/index.module.scss'
-
 const DashboardSlider = ({
   items,
   spinner,
   goToPartPage,
 }: IDashboardSlider) => {
+  const mode = useStore($mode)
   const isMedia768 = useMediaQuery(768)
   const isMedia1366 = useMediaQuery(1366)
   const isMedia800 = useMediaQuery(800)
@@ -39,6 +42,7 @@ const DashboardSlider = ({
     autoplay: true,
     speed: 500,
     arrows: false,
+    swipeToSlide: true,
     slidesToScroll: isMedia768 ? 1 : 2,
   }
 
@@ -47,7 +51,12 @@ const DashboardSlider = ({
   }
 
   return (
-    <Slider {...settings} className={styles.dashboard__slider}>
+    <Slider
+      {...settings}
+      className={cn(styles.dashboard__slider, {
+        [styles.dark_mode]: mode === 'dark',
+      })}
+    >
       {spinner ? (
         [...Array(8)].map((_, i) => (
           <div className={skeletonStyles.skeleton__item} key={i} style={width}>
@@ -57,7 +66,7 @@ const DashboardSlider = ({
       ) : items.length ? (
         items.map((item) => (
           <div className={styles.dashboard__slide} key={item.id} style={width}>
-            <Image
+            <img
               src={JSON.parse(item.images)[0]}
               width={315}
               height={184}

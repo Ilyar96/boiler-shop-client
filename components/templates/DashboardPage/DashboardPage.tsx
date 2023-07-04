@@ -15,7 +15,7 @@ import styles from '@/styles/dashboard/index.module.scss'
 const DashboardPage = () => {
   const mode = useStore($mode)
   const shoppingCart = useStore($shoppingCart)
-  const [showAlert, setShowAlert] = useState(!!shoppingCart.length)
+  const [showAlert, setShowAlert] = useState(shoppingCart.length > 0)
   const [newParts, setNewParts] = useState<IBoilerPart[]>([])
   const [bestsellers, setBestsellers] = useState<IBoilerPart[]>([])
   const [spinner, setSpinner] = useState(false)
@@ -23,6 +23,14 @@ const DashboardPage = () => {
   useEffect(() => {
     loadBoilerParts()
   }, [])
+
+  useEffect(() => {
+    if (shoppingCart.length > 0) {
+      setShowAlert(true)
+      return
+    }
+    setShowAlert(false)
+  }, [shoppingCart.length])
 
   const loadBoilerParts = async () => {
     try {

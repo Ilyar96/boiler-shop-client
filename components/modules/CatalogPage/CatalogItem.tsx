@@ -1,19 +1,18 @@
+/* eslint-disable @next/next/no-img-element */
+import { useState } from 'react'
 import { useStore } from 'effector-react'
 import Link from 'next/link'
+import cn from 'classnames'
 import { $mode } from '@/context/mode'
 import { IBoilerPart } from '@/types/boilerparts'
 import { formatPrice } from '@/utils/common'
 import { $shoppingCart } from '@/context/shopping-cart'
 import { $user } from '@/context/user'
-import styles from '@/styles/catalog/index.module.scss'
-import Image from 'next/image'
+import { toggleCartItem } from '@/utils/shopping-cart'
 import CartHoverCheckedSvg from '@/components/elements/CartHoverCheckedSvg/CartHoverCheckedSvg'
 import CartHoverSvg from '@/components/elements/CartHoverSvg/CartHoverSvg'
+import styles from '@/styles/catalog/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
-import { useState } from 'react'
-import cn from 'classnames'
-import { toggleCartItem } from '@/utils/shopping-cart'
-import { IShoppingCartItem } from '@/types/shopping-cart'
 
 const CatalogItem = ({ item }: { item: IBoilerPart }) => {
   const mode = useStore($mode)
@@ -28,7 +27,7 @@ const CatalogItem = ({ item }: { item: IBoilerPart }) => {
 
   return (
     <li className={`${styles.catalog__list__item} ${darkModeClass}`}>
-      <Image
+      <img
         width={224}
         height={184}
         className={styles.catalog__list__item__image}

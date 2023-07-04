@@ -1,6 +1,10 @@
 import { createEffect } from 'effector-next'
 import api from '../axiosClient'
-import { IBoilerParts, IBoilerPartsFilters } from '@/types/boilerparts'
+import {
+  IBoilerPart,
+  IBoilerParts,
+  IBoilerPartsFilters,
+} from '@/types/boilerparts'
 
 export const getBestsellersOrNewPartsFx = createEffect(async (url: string) => {
   const { data } = await api.get<IBoilerParts>(url)
@@ -17,3 +21,8 @@ export const getBoilerPartsFx = createEffect(
     return data
   }
 )
+
+export const getBoilerPartFx = createEffect(async (url: string) => {
+  const { data } = await api.get<IBoilerPart>(url)
+  return data
+})
