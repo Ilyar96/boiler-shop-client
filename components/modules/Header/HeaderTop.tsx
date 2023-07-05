@@ -9,7 +9,7 @@ import { usePopup } from '@/hooks/usePopup'
 import styles from '@/styles/header/index.module.scss'
 
 const navRoutes = [
-  { href: '/shopping-payment', title: 'Доставка и оплата' },
+  { href: '/shipping-payment', title: 'Доставка и оплата' },
   { href: '/about', title: 'О компании' },
   { href: '/catalog', title: 'Каталог' },
   { href: '/contacts', title: 'Контакты' },
