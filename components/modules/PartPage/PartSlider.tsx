@@ -19,7 +19,7 @@ const PartSlider = ({ images }: { images: string[] }) => {
     slidesToScroll: 1,
     swipeToSlide: true,
   }
-  console.log(images)
+
   return (
     <Slider {...settings} className={styles.part__slider}>
       {images.map((src, i) => (

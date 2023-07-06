@@ -51,31 +51,36 @@ export const optionStyles = (
   state: OptionProps<IOption, boolean, GroupBase<IOption>>,
   theme: string
 ) => {
-  const backgroundForLightMode = state.isSelected ? '#2d2d2d' : '#ffffff'
-  const backgroundForDarkMode = state.isSelected ? '#ffffff' : '#2d2d2d'
+  const backgroundForLightMode = state.isSelected
+    ? '#2d2d2d'
+    : state.isFocused
+    ? '#9e9e9e'
+    : '#ffffff'
+  const backgroundForDarkMode = state.isSelected
+    ? '#ffffff'
+    : state.isFocused
+    ? '#9e9e9e'
+    : '#2d2d2d'
+
   const colorForLightMode = state.isSelected ? '#f2f2f2' : '#222222'
   const colorForDarkMode = state.isSelected ? '#222222' : '#f2f2f2'
 
-  const backgroundHoverForLightMode = state.isSelected ? '#9e9e9e' : '#f2f2f2'
-  const backgroundHoverForDarkMode = state.isSelected ? '#9e9e9e' : '#f2f2f2'
-  const colorHoverForLightMode = state.isSelected ? '#f2f2f2' : '#9e9e9e'
-  const colorHoverForDarkMode = state.isSelected ? '#f2f2f2' : '#9e9e9e'
+  const backgroundColor = 'dark'
+    ? backgroundForDarkMode
+    : backgroundForLightMode
+  const color = theme === 'dark' ? colorForDarkMode : colorForLightMode
 
   return {
     ...defaultStyles,
     cursor: 'pointer',
     padding: '6px 12px',
     margin: 0,
-    '&:hover': {
-      backgroundColor:
-        theme === 'dark'
-          ? backgroundHoverForDarkMode
-          : backgroundHoverForLightMode,
-      color: theme === 'dark' ? colorHoverForDarkMode : colorHoverForLightMode,
+    '&:active': {
+      backgroundColor,
+      color,
     },
-    backgroundColor:
-      theme === 'dark' ? backgroundForDarkMode : backgroundForLightMode,
-    color: theme === 'dark' ? colorForDarkMode : colorForLightMode,
+    backgroundColor,
+    color,
   }
 }
 

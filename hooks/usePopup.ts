@@ -4,7 +4,7 @@ import {
   smoothScrollToTop,
   toggleClassNamesForOverlayAndBody,
 } from '@/utils/common'
-// import { setSearchInputZIndex } from '@/context/header'
+import { setSearchInputZIndex } from '@/context/header'
 
 export const usePopup = () => {
   const [open, setOpen] = useState(false)
@@ -18,7 +18,7 @@ export const usePopup = () => {
   const closePopup = () => {
     removeClassNamesForOverlayAndBody()
     setOpen(false)
-    // setSearchInputZIndex(1)
+    setSearchInputZIndex(1)
   }
 
   useEffect(() => {

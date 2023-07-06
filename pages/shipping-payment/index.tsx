@@ -18,14 +18,11 @@ function ShippingPaymentPage() {
         <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
       </Head>
       <Layout>
-        <main>
-          <Breadcrumbs
-            getDefaultTextGenerator={getDefaultTextGenerator}
-            getTextGenerator={getTextGenerator}
-          />
-          <ShippingPayment />
-          <div className="overlay" />
-        </main>
+        <Breadcrumbs
+          getDefaultTextGenerator={getDefaultTextGenerator}
+          getTextGenerator={getTextGenerator}
+        />
+        <ShippingPayment />
       </Layout>
     </>
   )

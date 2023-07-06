@@ -19,7 +19,6 @@ const PartImagesList = () => {
 
   useEffect(() => {
     if (!boilerPart.id) return
-    console.log('boilerPart: ', boilerPart)
 
     const boilerPartFirstImage = JSON.parse(boilerPart.images)[0]
     if (currentImgSrc !== boilerPartFirstImage) {

@@ -243,6 +243,10 @@
       border-bottom-left-radius: 0;
       cursor: pointer;
 
+      &__search_focused {
+        z-index: 100;
+      }
+
       &__span svg {
         fill: #4e4c4c;
       }
