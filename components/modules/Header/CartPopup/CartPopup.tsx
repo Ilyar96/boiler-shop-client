@@ -17,6 +17,7 @@ import { getCartItemsFx } from '@/app/api/shopping-cart'
 import { $user } from '@/context/user'
 import { getTotalPrice } from '@/utils/shopping-cart'
 import { formatPrice } from '@/utils/common'
+import { HTTPStatus } from '@/constants'
 import ShoppingCartSvg from '@/components/elements/ShoppingCartSvg/ShoppingCartSvg'
 import styles from '@/styles/cartPopup/index.module.scss'
 
@@ -38,6 +39,13 @@ const CartPopup = forwardRef<HTMLDivElement, IWrappedComponentProps>(
         const data = await getCartItemsFx(`/shopping-cart/${user.userId}`)
         setShoppingCart(data)
       } catch (error) {
+        const axiosError = error as AxiosError
+        if (
+          axiosError.response &&
+          axiosError.response.status === HTTPStatus.FORBIDDEN
+        ) {
+          return false
+        }
         toast.error((error as Error).message)
       }
     }
