@@ -1,7 +1,7 @@
 import { $mode } from '@/context/mode'
 import styles from '@/styles/feedbackForm/index.module.scss'
 import { useStore } from 'effector-react'
-// import emailjs from '@emailjs/browser'
+import emailjs from '@emailjs/browser'
 import NameInput from './NameInput'
 import { useForm } from 'react-hook-form'
 import { FeedbackInputs } from '@/types/feedbackForm'
@@ -25,23 +25,23 @@ const FeedbackForm = () => {
 
   const submitForm = () => {
     setSpinner(true)
-    // emailjs
-    //   .sendForm(
-    //     'service_4406d2p',
-    //     'template_88thtrg',
-    //     formRef.current,
-    //     'ARtfb1bp4SELm6yXa'
-    //   )
-    //   .then((result) => {
-    //     setSpinner(false)
-    //     toast.success(`Сообщение отправлено! ${result.text}`)
-    //   })
-    //   .catch((error) => {
-    //     setSpinner(false)
-    //     toast.error(`Что-то пошло не так! ${error.text}`)
-    //   })
-
-    formRef.current.reset()
+    emailjs
+      .sendForm(
+        'service_l29lr8o', // Service id
+        'template_honjqpd', // Template id
+        formRef.current,
+        '7yJBAlYSup5K4X8pc' // Public key
+      )
+      .then((result) => {
+        toast.success(`Сообщение отправлено! ${result.text}`)
+        formRef.current.reset()
+      })
+      .catch((error) => {
+        toast.error(`Что-то пошло не так! ${error.text}`)
+      })
+      .finally(() => {
+        setSpinner(false)
+      })
   }
 
   return (
@@ -75,7 +75,7 @@ const FeedbackForm = () => {
           darkModeClass={darkModeClass}
         />
         <div className={styles.feedback_form__form__btn}>
-          <button>
+          <button disabled={spinner}>
             {spinner ? (
               <span
                 className={spinnerStyles.spinner}

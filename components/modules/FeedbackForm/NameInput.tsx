@@ -15,7 +15,7 @@ const NameInput = ({ register, errors, darkModeClass }: IFeedbackInput) => (
           message: 'Недопустимое значение',
         },
         minLength: 2,
-        maxLength: 15,
+        maxLength: 20,
       })}
     />
     {errors.name && (
@@ -25,7 +25,7 @@ const NameInput = ({ register, errors, darkModeClass }: IFeedbackInput) => (
       <span className={styles.error_alert}>Минимум 2 символа!</span>
     )}
     {errors.name && errors.name.type === 'maxLength' && (
-      <span className={styles.error_alert}>Не более 15 символов!</span>
+      <span className={styles.error_alert}>Не более 20 символов!</span>
     )}
   </label>
 )
