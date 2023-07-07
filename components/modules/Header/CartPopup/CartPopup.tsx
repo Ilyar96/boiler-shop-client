@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect } from 'react'
 import { useStore } from 'effector-react'
+import { AxiosError } from 'axios'
 import { AnimatePresence, motion } from 'framer-motion'
 import cn from 'classnames'
 import { toast } from 'react-toastify'

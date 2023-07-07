@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import { $boilerPart } from '@/context/boilerPart'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -9,7 +8,6 @@ import PartSlider from './PartSlider'
 import styles from '@/styles/part/index.module.scss'
 
 const PartImagesList = () => {
-  const router = useRouter()
   const boilerPart = useStore($boilerPart)
   const isMobile = useMediaQuery(850)
   const images = boilerPart.images
@@ -24,6 +22,7 @@ const PartImagesList = () => {
     if (currentImgSrc !== boilerPartFirstImage) {
       setCurrentImgSrc(boilerPartFirstImage)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boilerPart.id])
 
   return (
