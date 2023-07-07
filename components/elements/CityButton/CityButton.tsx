@@ -6,7 +6,7 @@ import { $mode } from '@/context/mode'
 import { $userCity, setUserCity } from '@/context/user'
 import { getGeolocationFx } from '@/app/api/geolocation'
 import LocationSvg from '../LocationSvg/LocationSvg'
-import styles from '@/styles/CityButton/index.module.scss'
+import styles from '@/styles/cityButton/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 
 const CityButton = () => {

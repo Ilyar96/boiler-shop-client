@@ -10,7 +10,7 @@ import ProfileSvg from '@/components/elements/ProfileSvg/ProfileSvg'
 import LogoutSvg from '@/components/elements/LogoutSvg/LogoutSvg'
 import { withClickOutside } from '@/utils/withClickOutside'
 import { logoutFx } from '@/app/api/auth'
-import styles from '@/styles/profileDropdown/index.module.scss'
+import styles from '@/styles/profileDropDown/index.module.scss'
 
 const ProfileDropdown = forwardRef<HTMLDivElement, IWrappedComponentProps>(
   ({ open, setOpen }, ref) => {
