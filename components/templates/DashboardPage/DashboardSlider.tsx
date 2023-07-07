@@ -12,6 +12,7 @@ import skeletonStyles from '@/styles/skeleton/index.module.scss'
 import { formatPrice } from '@/utils/common'
 import { $mode } from '@/context/mode'
 import styles from '@/styles/dashboard/index.module.scss'
+
 const DashboardSlider = ({
   items,
   spinner,
@@ -94,7 +95,9 @@ const DashboardSlider = ({
           </div>
         ))
       ) : (
-        <span>Список товаров пуст....</span>
+        <span className={styles.dashboard__slider__empty}>
+          Список товаров пуст....
+        </span>
       )}
     </Slider>
   )

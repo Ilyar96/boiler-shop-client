@@ -276,6 +276,12 @@
     @media (max-width: 800px) {
       margin-bottom: 33px;
     }
+
+    &__empty {
+      .dark_mode & {
+        color: #ffffff;
+      }
+    }
   }
 
   &__slide {
