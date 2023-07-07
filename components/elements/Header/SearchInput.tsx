@@ -1,9 +1,5 @@
 import { MutableRefObject, useRef, useState } from 'react'
-import Select, {
-  GroupBase,
-  InputActionMeta,
-  OptionsOrGroups,
-} from 'react-select'
+import Select, { GroupBase, OptionsOrGroups } from 'react-select'
 import { useStore } from 'effector-react'
 import { useRouter } from 'next/router'
 import cn from 'classnames'
@@ -48,7 +44,7 @@ const SearchInput = () => {
   const borderRef = useRef() as MutableRefObject<HTMLButtonElement>
   const delayCallback = useDebounceCallback(1000)
 
-  const onSearchInputChange = (search: string, { action }: InputActionMeta) => {
+  const onSearchInputChange = (search: string) => {
     search && setInputValue(search)
     delayCallback(() => searchPart(search))
   }
@@ -103,7 +99,7 @@ const SearchInput = () => {
     setSearchInputZIndex(100)
   }
 
-  const onBlur = (e) => {
+  const onBlur = () => {
     setSearchInputZIndex(1)
     removeClassNamesForOverlayAndBody()
   }
