@@ -3,8 +3,8 @@ import api from '../axiosClient'
 import { ICheckPayFx, IMakePayFx } from '@/types/order'
 
 export const makePaymentFx = createEffect(
-  async ({ url, amount }: IMakePayFx) => {
-    const { data } = await api.post(url, { amount })
+  async ({ url, amount, description }: IMakePayFx) => {
+    const { data } = await api.post(url, { amount, description })
 
     return data
   }

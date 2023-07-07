@@ -18,12 +18,12 @@ function WholesaleBuyers() {
         <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
       </Head>
       <Layout>
-          <Breadcrumbs
-            getDefaultTextGenerator={getDefaultTextGenerator}
-            getTextGenerator={getTextGenerator}
-          />
-          <ContactsPage isWholesaleBuyersPage={true} />
-        </main>
+        <Breadcrumbs
+          getDefaultTextGenerator={getDefaultTextGenerator}
+          getTextGenerator={getTextGenerator}
+        />
+        <ContactsPage isWholesaleBuyersPage={true} />
+      </Layout>
     </>
   )
 }

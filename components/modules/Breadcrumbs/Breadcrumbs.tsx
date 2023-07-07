@@ -35,6 +35,7 @@ const Breadcrumbs = ({
           .replace(']', '')
 
         const href = '/' + asPathNestedRoutes.slice(0, idx + 1).join('/')
+
         return {
           href,
           textGenerator: getTextGenerator(param, router.query),

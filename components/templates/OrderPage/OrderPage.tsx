@@ -8,7 +8,7 @@ import OrderAccordion from '@/components/modules/OrderPage/OrderAccordion'
 import { toast } from 'react-toastify'
 import { checkPaymentFx, makePaymentFx } from '@/app/api/payment'
 import { removeFromCartFx } from '@/app/api/shopping-cart'
-import { $user } from '@/context/user'
+import { $user, $userCity } from '@/context/user'
 import styles from '@/styles/order/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 
@@ -16,6 +16,7 @@ const OrderPage = () => {
   const router = useRouter()
   const mode = useStore($mode)
   const user = useStore($user)
+  const userCity = useStore($userCity)
   const shoppingCart = useStore($shoppingCart)
   const darkModeClass = mode === 'dark' ? `${styles.dark_mode}` : ''
   const spinner = useStore(makePaymentFx.pending)
@@ -40,7 +41,11 @@ const OrderPage = () => {
       const data = await makePaymentFx({
         url: '/payment',
         amount: totalPrice,
-        description: '',
+        description: `${
+          userCity.city
+            ? `Город: ${userCity.city}, улица: ${userCity.street}`
+            : ''
+        }`,
       })
 
       sessionStorage.setItem('paymentId', data.id)
@@ -59,7 +64,10 @@ const OrderPage = () => {
 
       if (data.status === 'succeeded') {
         resetCart()
+        return
       }
+
+      sessionStorage.removeItem('paymentId')
     } catch (error) {
       console.log((error as Error).message)
       sessionStorage.removeItem('paymentId')
