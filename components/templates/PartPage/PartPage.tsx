@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useStore } from 'effector-react'
 import { toast } from 'react-toastify'
@@ -18,7 +18,6 @@ import { getBoilerPartsFx } from '@/app/api/boilerparts'
 import { $boilerParts, setBoilerParts } from '@/context/boilerParts'
 import DashboardSlider from '../DashboardPage/DashboardSlider'
 import PartAccordion from '@/components/modules/PartPage/PartAccordion'
-import { removeFromCartFx } from '@/app/api/shopping-cart'
 import styles from '@/styles/part/index.module.scss'
 import spinnerStyles from '@/styles/spinner/index.module.scss'
 
@@ -29,12 +28,13 @@ const Part = () => {
   const boilerParts = useStore($boilerParts)
   const boilerPart = useStore($boilerPart)
   const shoppingCart = useStore($shoppingCart)
-  const spinnerToggleCart = useStore(removeFromCartFx.pending)
+  const [spinnerToggleCart, setSpinnerToggleCart] = useState(false)
   const spinnerSlider = useStore(getBoilerPartsFx.pending)
   const isMobile = useMediaQuery(850)
   const isInCart = shoppingCart.some(
     (cartItem) => cartItem.partId === boilerPart.id
   )
+  const isInStock = boilerPart.in_stock > 0
   const popularParts =
     boilerParts?.rows?.filter((item) => item.id !== boilerPart.id) || []
 
@@ -59,7 +59,7 @@ const Part = () => {
   }
 
   const toggleToCart = () =>
-    toggleCartItem(user.username, boilerPart.id, isInCart)
+    toggleCartItem(user.username, boilerPart.id, isInCart, setSpinnerToggleCart)
 
   return (
     <section className={cn({ [styles.dark_mode]: mode === 'dark' })}>
@@ -86,30 +86,32 @@ const Part = () => {
               <span className={styles.part__info__code}>
                 Артикул: {boilerPart.vendor_code}
               </span>
-              <button
-                className={cn(styles.part__info__btn, {
-                  [styles.in_cart]: isInCart,
-                })}
-                onClick={toggleToCart}
-              >
-                {spinnerToggleCart ? (
-                  <span
-                    className={spinnerStyles.spinner}
-                    style={{ top: 10, left: '45%' }}
-                  />
-                ) : (
-                  <>
-                    <span className={styles.part__info__btn__icon}>
-                      {isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}
-                    </span>
-                    {isInCart ? (
-                      <span>Добавлено в корзину</span>
-                    ) : (
-                      <span>Положить в корзину</span>
-                    )}
-                  </>
-                )}
-              </button>
+              {isInStock && (
+                <button
+                  className={cn(styles.part__info__btn, {
+                    [styles.in_cart]: isInCart,
+                  })}
+                  onClick={toggleToCart}
+                >
+                  {spinnerToggleCart ? (
+                    <span
+                      className={spinnerStyles.spinner}
+                      style={{ top: 10, left: '45%' }}
+                    />
+                  ) : (
+                    <>
+                      <span className={styles.part__info__btn__icon}>
+                        {isInCart ? <CartHoverCheckedSvg /> : <CartHoverSvg />}
+                      </span>
+                      {isInCart ? (
+                        <span>Добавлено в корзину</span>
+                      ) : (
+                        <span>Положить в корзину</span>
+                      )}
+                    </>
+                  )}
+                </button>
+              )}
               {!isMobile && <PartTabs />}
             </div>
           </div>
